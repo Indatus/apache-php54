@@ -45,3 +45,17 @@ execute "install_composer" do
   command "curl -s https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer"
   action :run
 end
+
+#move over the ssl certs if they are present
+cookbook_file "/etc/php5/apache2/php.ini" do
+  owner "root"
+  group "root"
+  mode 0644
+  action :create_if_missing
+  backup 3
+end
+
+execute "reload_apache_after_phpini" do
+  command "service apache2 reload"
+  action :run
+end
