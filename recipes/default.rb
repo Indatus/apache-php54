@@ -46,14 +46,24 @@ execute "install_composer" do
   action :run
 end
 
-#move over the ssl certs if they are present
-cookbook_file "/etc/php5/apache2/php.ini" do
-  owner "root"
-  group "root"
-  mode 0644
-  action :create_if_missing
-  backup 3
+#install xdebug
+bash "install_xdebug" do
+  not_if "/etc/php5/apache2/php.ini | cat xdebug"
+  user "root"
+  cwd "/usr/src"
+  code <<-EOH
+    wget http://xdebug.org/files/xdebug-#{node[:xdebug][:version]}.tar.gz -O /usr/src/xdebug-#{node[:xdebug][:version]}.tar.gz
+    tar -zxf xdebug-#{node[:xdebug][:version]}.tar.gz
+    (cd xdebug-#{node[:xdebug][:version]}/ && ./configure && make)
+    cp modules/xdebug.so /usr/lib/php5/`phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'`
+  EOH
 end
+
+#write out the php.ini file
+template "/etc/php5/apache2/php.ini" do
+  source "php.ini.erb"
+end
+
 
 execute "reload_apache_after_phpini" do
   command "service apache2 reload"
