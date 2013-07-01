@@ -1817,6 +1817,4 @@ ldap.max_links = -1
 ; tab-width: 4
 ; End:
 
-<%- if @node[:php][:phpize_version] != nil -%>
-zend_extension = /usr/lib/php5/<%= @node[:php][:phpize_version] %>/xdebug.so
-<%- end -%>
+zend_extension = /usr/lib/php5/<%= `cat /usr/src/xdebug-#{@node[:php][:xdebug_version]}/phpize_version.txt` %>/xdebug.so

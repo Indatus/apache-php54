@@ -1,3 +1,5 @@
+require "digest/sha1"
+
 #install PHP 5.4
 %w(curl libapache2-mod-php5 python-software-properties).each do |pkg|
   package pkg do
@@ -48,7 +50,8 @@ end
 
 #install xdebug
 bash "install_xdebug" do
-  not_if "/etc/php5/apache2/php.ini | cat xdebug"
+
+  #not_if File.exists? "/usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so"
 
   user "root"
   cwd "/usr/src"
@@ -56,12 +59,8 @@ bash "install_xdebug" do
     wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz
     tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz
     (cd xdebug-#{node[:php][:xdebug_version]}/ && phpize && ./configure && make)
-  EOH
-
-  node[:php][:phpize_version] = `cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'`
-
-  code <<-EOH
-    cp /usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so /usr/lib/php5/#{node[:xdebug][:phpize_version]}/
+    cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' >/usr/src/xdebug-#{node[:php][:xdebug_version]}/phpize_version.txt
+    cp /usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so /usr/lib/php5/`cat /usr/src/xdebug-#{node[:php][:xdebug_version]}/phpize_version.txt`/
   EOH
 
 end
