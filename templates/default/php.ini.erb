@@ -1817,4 +1817,4 @@ ldap.max_links = -1
 ; tab-width: 4
 ; End:
 
-zend_extension = /usr/lib/php5/<%= `cd /usr/src/xdebug-#{@node[:php][:xdebug_version]}/ && phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'` %>/xdebug.so
+zend_extension = /usr/lib/php5/<%= `cd /usr/src/xdebug-#{@node[:php][:xdebug_version]}/ && phpize | grep "Zend\ Module" | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'` %>/xdebug.so
