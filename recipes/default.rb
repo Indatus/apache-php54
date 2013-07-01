@@ -63,7 +63,7 @@ bash "install_xdebug" do
     (cd xdebug-#{node[:php][:xdebug_version]} && phpize && ./configure && make)
   EOH
 
-  cp_cmd = "cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep \"Zend\ Module\" | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | awk '/.*/ { print "/usr/lib/php5/"$1"/" }' | xargs cp modules/xdebug.so"
+  cp_cmd = %(cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep "Zend\ Module" | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | awk '/.*/ { print "/usr/lib/php5/"$1"/" }' | xargs cp modules/xdebug.so)
 
   log "xdebug_copy_cmd" do
     message "Xdebug copy command: #{cp_cmd}"
