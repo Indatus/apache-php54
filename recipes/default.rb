@@ -8,7 +8,7 @@ require "digest/sha1"
 end
 
 execute "enable_php54_apt_repo" do
-  nof_if {File.exists?("/etc/apt/sources.list.d/ondrej-php5-precise.list")}
+  not_if {File.exists?("/etc/apt/sources.list.d/ondrej-php5-precise.list")}
   command "add-apt-repository ppa:ondrej/php5 && apt-get update"
   action :run
 end
