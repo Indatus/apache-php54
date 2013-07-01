@@ -1,4 +1,8 @@
-require "digest/sha1"
+#make an apache service for restarting etc
+service "apache2" do
+  supports :restart => true, :start => true, :stop => true, :reload => true
+  action :nothing
+end 
 
 #install PHP 5.4
 %w(curl libapache2-mod-php5 python-software-properties).each do |pkg|
@@ -84,10 +88,5 @@ end
 #write out the php.ini file
 template "/etc/php5/apache2/php.ini" do
   source "php.ini.erb"
-end
-
-
-execute "reload_apache_after_phpini" do
-  command "service apache2 stop && service apache2 start"
-  action :run
+  notifies :restart, "service[apache2]"
 end
