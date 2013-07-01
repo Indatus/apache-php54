@@ -59,7 +59,7 @@ bash "install_xdebug" do
     wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz
     tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz
     (cd xdebug-#{node[:php][:xdebug_version]}/ && phpize && ./configure && make)
-    cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' >/usr/src/xdebug-#{node[:php][:xdebug_version]}/phpize_version.txt
+    cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' > phpize_version.txt
     cp /usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so /usr/lib/php5/`cat /usr/src/xdebug-#{node[:php][:xdebug_version]}/phpize_version.txt`/
   EOH
 
