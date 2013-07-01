@@ -57,13 +57,28 @@ bash "install_xdebug" do
 
   user "root"
   cwd "/usr/src"
+
+  #download the xdebug source unless we already have it
+  unless File.exists?("/usr/src/xdebug-#{node[:php][:xdebug_version]}")
+    code <<-EOH
+      wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz
+      tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz   
+    EOH
+  end
+
+  #configure and make unless that's already been done
+  unless File.exists?("/usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so")
+    code <<-EOH
+      (cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize && ./configure && make)
+    EOH
+  end
+
+  #always get the phpize Zend Module Api version for php.ini
   code <<-EOH
-    wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz
-    tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz
-    (cd xdebug-#{node[:php][:xdebug_version]} && phpize && ./configure && make)
     (cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep "Zend\ Module" | sed 's/[^0-9]*//g' > /tmp/phpize_version.txt)
     (cp /usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so /usr/lib/php5/`cat /tmp/phpize_version.txt`/)    
   EOH
+  
 end
 
 #write out the php.ini file
