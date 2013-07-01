@@ -1817,5 +1817,6 @@ ldap.max_links = -1
 ; tab-width: 4
 ; End:
 
-<%- cmd = "cd /usr/src/xdebug-#{@node[:xdebug][:version]}/ &&  phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'" -%>
-zend_extension = /usr/lib/php5/<%= `#{cmd}` %>/xdebug.so
+<%- if @node[:php][:phpize_version] != nil -%>
+zend_extension = /usr/lib/php5/<%= @node[:php][:phpize_version] %>/xdebug.so
+<%- end -%>

@@ -49,14 +49,21 @@ end
 #install xdebug
 bash "install_xdebug" do
   not_if "/etc/php5/apache2/php.ini | cat xdebug"
+
   user "root"
   cwd "/usr/src"
   code <<-EOH
-    wget http://xdebug.org/files/xdebug-#{node[:xdebug][:version]}.tgz -O /usr/src/xdebug-#{node[:xdebug][:version]}.tgz
-    tar -zxf xdebug-#{node[:xdebug][:version]}.tgz
-    (cd xdebug-#{node[:xdebug][:version]}/ && phpize && ./configure && make)
-    cp /usr/src/xdebug-#{node[:xdebug][:version]}/modules/xdebug.so /usr/lib/php5/`phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'`
+    wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz
+    tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz
+    (cd xdebug-#{node[:php][:xdebug_version]}/ && phpize && ./configure && make)
   EOH
+
+  node[:php][:phpize_version] = `cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'`
+
+  code <<-EOH
+    cp /usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so /usr/lib/php5/#{node[:xdebug][:phpize_version]}/
+  EOH
+
 end
 
 #write out the php.ini file

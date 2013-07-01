@@ -1,1 +1,1 @@
-default[:xdebug][:version] = "2.2.3"
+default[:php][:xdebug_version] = "2.2.3"
