@@ -61,9 +61,16 @@ bash "install_xdebug" do
     wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz
     tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz
     (cd xdebug-#{node[:php][:xdebug_version]} && phpize && ./configure && make)
-    phpize | grep "Zend\ Module" | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | awk '/.*/ { print "/usr/lib/php5/"$1"/" }' | xargs cp modules/xdebug.so
   EOH
 
+  cp_cmd = "cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep \"Zend\ Module\" | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | awk '/.*/ { print "/usr/lib/php5/"$1"/" }' | xargs cp modules/xdebug.so"
+
+  log "xdebug_copy_cmd" do
+    message "Xdebug copy command: #{cp_cmd}"
+    level :info
+  end
+
+  code cp_cmd
 end
 
 #write out the php.ini file
