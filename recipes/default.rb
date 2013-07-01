@@ -88,6 +88,6 @@ end
 
 
 execute "reload_apache_after_phpini" do
-  command "service apache2 reload"
+  command "service apache2 stop && service apache2 start"
   action :run
 end
