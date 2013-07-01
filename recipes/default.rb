@@ -44,7 +44,7 @@ end
 
 # install composer
 execute "install_composer" do
-  not_if File.exists? "/usr/local/bin/composer"
+  not_if { File.exists?("/usr/local/bin/composer") }
   command "curl -s https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer"
   action :run
 end
