@@ -8,6 +8,7 @@ require "digest/sha1"
 end
 
 execute "enable_php54_apt_repo" do
+  nof_if {File.exists?("/etc/apt/sources.list.d/ondrej-php5-precise.list")}
   command "add-apt-repository ppa:ondrej/php5 && apt-get update"
   action :run
 end
@@ -59,9 +60,8 @@ bash "install_xdebug" do
   code <<-EOH
     wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz
     tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz
-    (cd xdebug-#{node[:php][:xdebug_version]}/ && phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' > phpize_version.txt)
-    (./configure && make)
-    cp /usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so /usr/lib/php5/`cat /usr/src/xdebug-#{node[:php][:xdebug_version]}/phpize_version.txt`/
+    (cd xdebug-#{node[:php][:xdebug_version]} && phpize && ./configure && make)
+    phpize | grep Zend\ Module | sed 's/[^0-9.]*\([0-9.]*\).*/\1/' | awk '/.*/ { print "/usr/lib/php5/"$1"/" }' | xargs cp modules/xdebug.so
   EOH
 
 end
