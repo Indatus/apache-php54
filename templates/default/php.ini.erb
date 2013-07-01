@@ -1817,4 +1817,6 @@ ldap.max_links = -1
 ; tab-width: 4
 ; End:
 
+<%- if File.exists?("/tmp/phpize_version.txt") -%>
 zend_extension = /usr/lib/php5/<%= `cat /tmp/phpize_version.txt`.chomp.gsub("\n", "") %>/xdebug.so
+<%- end -%>
