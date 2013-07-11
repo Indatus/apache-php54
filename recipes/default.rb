@@ -55,31 +55,35 @@ execute "install_composer" do
   action :run
 end
 
-#download and extract xdebug source
-execute "xdebug_download_source" do
-  not_if { File.exists?("/usr/src/xdebug-#{node[:php][:xdebug_version]}") }
-  command <<-EOH
-    wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz &&
-    cd /usr/src/ && tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz   
-  EOH
-  action :run
-end
+if node[:php][:install_xdebug] == true
 
-#compile xdebug source
-execute "xdebug_compile_source" do
-  not_if { File.exists?("/usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so") }
-  command "cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize && ./configure && make"
-  action :run
-end
+  #download and extract xdebug source
+  execute "xdebug_download_source" do
+    not_if { File.exists?("/usr/src/xdebug-#{node[:php][:xdebug_version]}") }
+    command <<-EOH
+      wget http://xdebug.org/files/xdebug-#{node[:php][:xdebug_version]}.tgz -O /usr/src/xdebug-#{node[:php][:xdebug_version]}.tgz &&
+      cd /usr/src/ && tar -zxf xdebug-#{node[:php][:xdebug_version]}.tgz   
+    EOH
+    action :run
+  end
 
-#copy xdebug module
-execute "xdebug_copy_module" do
-  command <<-EOH
-    (cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep "Zend\ Module" | sed 's/[^0-9]*//g' > /tmp/phpize_version.txt)
-    (cp /usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so /usr/lib/php5/`cat /tmp/phpize_version.txt`/)    
-  EOH
-  action :run
-end
+  #compile xdebug source
+  execute "xdebug_compile_source" do
+    not_if { File.exists?("/usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so") }
+    command "cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize && ./configure && make"
+    action :run
+  end
+
+  #copy xdebug module
+  execute "xdebug_copy_module" do
+    command <<-EOH
+      (cd /usr/src/xdebug-#{node[:php][:xdebug_version]} && phpize | grep "Zend\ Module" | sed 's/[^0-9]*//g' > /tmp/phpize_version.txt)
+      (cp /usr/src/xdebug-#{node[:php][:xdebug_version]}/modules/xdebug.so /usr/lib/php5/`cat /tmp/phpize_version.txt`/)    
+    EOH
+    action :run
+  end
+
+end #end if xdebug
 
 
 #write out the php.ini file
