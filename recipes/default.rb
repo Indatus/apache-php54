@@ -5,6 +5,13 @@ service "apache2" do
 end 
 
 
+%w(curl python-software-properties).each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
+
 execute "enable_php54_apt_repo" do
   not_if {File.exists?("/etc/apt/sources.list.d/ondrej-php5-precise.list")}
   
@@ -19,16 +26,10 @@ execute "enable_php54_apt_repo" do
 end
 
 
+
 #install PHP 5.4
-%w(curl libapache2-mod-php5 python-software-properties).each do |pkg|
-  package pkg do
-    action :install
-  end
-end
-
-
-#setup other php stuff
 php_packages = [
+  "libapache2-mod-php5",
   "php5",
   "php5-common", 
   "php5-dev", 
