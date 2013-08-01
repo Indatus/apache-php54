@@ -4,19 +4,27 @@ service "apache2" do
   action :nothing
 end 
 
+
+execute "enable_php54_apt_repo" do
+  not_if {File.exists?("/etc/apt/sources.list.d/ondrej-php5-precise.list")}
+  
+  # 2013-07-30, ppa:ondrej/php5 is now installing PHP5.5 which requires Apache2.4 via ppa:ondrej/apache2
+  # RE: http://www.justincarmony.com/blog/2013/07/31/ubuntu-12-04-php-5-4-apache2-and-ppaondrejphp5/
+  # command "add-apt-repository ppa:ondrej/php5 && apt-get update" 
+  
+  #use ppa:ondrej/php5-oldstable to get PHP5.4 for ubuntu 12.04.2
+  command "add-apt-repository ppa:ondrej/php5-oldstable && apt-get update"
+
+  action :run
+end
+
+
 #install PHP 5.4
 %w(curl libapache2-mod-php5 python-software-properties).each do |pkg|
   package pkg do
     action :install
   end
 end
-
-execute "enable_php54_apt_repo" do
-  not_if {File.exists?("/etc/apt/sources.list.d/ondrej-php5-precise.list")}
-  command "add-apt-repository ppa:ondrej/php5 && apt-get update"
-  action :run
-end
-
 
 
 #setup other php stuff
