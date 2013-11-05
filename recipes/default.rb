@@ -13,7 +13,7 @@ end
 
 
 execute "enable_php54_apt_repo" do
-  not_if {File.exists?("/etc/apt/sources.list.d/ondrej-php5-precise.list")}
+  not_if {File.exists?("/etc/apt/sources.list.d/ondrej-php5-oldstable-precise.list")}
   
   # 2013-07-30, ppa:ondrej/php5 is now installing PHP5.5 which requires Apache2.4 via ppa:ondrej/apache2
   # RE: http://www.justincarmony.com/blog/2013/07/31/ubuntu-12-04-php-5-4-apache2-and-ppaondrejphp5/
