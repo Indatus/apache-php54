@@ -28,30 +28,33 @@ end
 
 
 #install PHP 5.4
-php_packages = [
-  "libapache2-mod-php5",
-  "php5",
-  "php5-common", 
-  "php5-dev", 
-  "php5-mysql", 
-  "php5-sqlite", 
-  "php5-tidy", 
-  "php5-xmlrpc", 
-  "php5-xsl", 
-  "php5-cgi", 
-  "php5-mcrypt", 
-  "php5-curl", 
-  "php5-gd", 
-  "php5-memcache", 
-  "php5-mhash", 
-  "php5-pspell", 
-  "php5-snmp", 
-  "php5-sqlite", 
-  "php5-cli", 
-  "php5-imap"
-]
-php_packages.each do |pkg|
+php_packages = {
+  "libapache2-mod-php5" => "5.4.21-1+debphp.org~precise+1",
+  "php5"                => "5.4.21-1+debphp.org~precise+1",
+  "php5-common"         => "5.4.21-1+debphp.org~precise+1", 
+  "php5-dev"            => "5.4.21-1+debphp.org~precise+1", 
+  "php5-mysql"          => "5.4.21-1+debphp.org~precise+1", 
+  "php5-sqlite"         => "5.4.21-1+debphp.org~precise+1", 
+  "php5-tidy"           => "5.4.21-1+debphp.org~precise+1", 
+  "php5-xmlrpc"         => "5.4.21-1+debphp.org~precise+1", 
+  "php5-xsl"            => "5.4.21-1+debphp.org~precise+1", 
+  "php5-cgi"            => "5.4.21-1+debphp.org~precise+1", 
+  "php5-mcrypt"         => "5.4.21-1+debphp.org~precise+1", 
+  "php5-curl"           => "5.4.21-1+debphp.org~precise+1", 
+  "php5-gd"             => "5.4.21-1+debphp.org~precise+1", 
+  "php5-memcache"       => "5.4.21-1+debphp.org~precise+1", 
+  "php5-mhash"          => "5.4.21-1+debphp.org~precise+1", 
+  "php5-pspell"         => "5.4.21-1+debphp.org~precise+1", 
+  "php5-snmp"           => "5.4.21-1+debphp.org~precise+1", 
+  "php5-sqlite"         => "5.4.21-1+debphp.org~precise+1", 
+  "php5-cli"            => "5.4.21-1+debphp.org~precise+1", 
+  "php5-imap"           => "5.4.21-1+debphp.org~precise+1"
+}
+
+php_packages.each do |pkg, ver|
   package pkg do
+    version ver
+    options "--force-yes"
     action :install
   end
 end
