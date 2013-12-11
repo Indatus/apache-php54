@@ -43,7 +43,6 @@ php_packages = {
   "php5-curl"           => "5.4.22-1+debphp.org~precise+1", 
   "php5-gd"             => "5.4.22-1+debphp.org~precise+1", 
   "php5-memcache"       => "3.0.8-1~precise+1", 
-  "php5-mhash"          => "5.4.22-1+debphp.org~precise+1", 
   "php5-pspell"         => "5.4.22-1+debphp.org~precise+1", 
   "php5-snmp"           => "5.4.22-1+debphp.org~precise+1", 
   "php5-sqlite"         => "5.4.22-1+debphp.org~precise+1", 
