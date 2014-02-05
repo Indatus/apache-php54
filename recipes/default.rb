@@ -47,7 +47,8 @@ php_packages = {
   "php5-snmp"           => nil,
   "php5-sqlite"         => nil,
   "php5-cli"            => nil,
-  "php5-imap"           => nil
+  "php5-imap"           => nil,
+  "php5-ldap"           => nil
 }
 
 php_packages.each do |pkg, ver|
