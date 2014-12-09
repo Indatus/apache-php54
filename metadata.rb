@@ -1,3 +1,4 @@
+name             'apache-php54'
 maintainer       'Brian Webb'
 maintainer_email 'bwebb@indatus.com'
 description       "Installs PHP 5.4 for apache"
