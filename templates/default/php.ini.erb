@@ -1816,8 +1816,3 @@ ldap.max_links = -1
 ; Local Variables:
 ; tab-width: 4
 ; End:
-<%- if @node[:php][:install_xdebug] == true -%>
-	<%- if File.exists?("/tmp/phpize_version.txt") -%>
-	zend_extension = /usr/lib/php5/<%= `cat /tmp/phpize_version.txt`.chomp.gsub("\n", "") %>/xdebug.so
-	<%- end -%>
-<%- end -%>
