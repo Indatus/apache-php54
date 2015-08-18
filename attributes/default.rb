@@ -24,6 +24,7 @@ when 'debian'
     php5-cli
     php5-imap
     php5-ldap
+    php5-intl
   )
 when 'rhel'
   %w(
